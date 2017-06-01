@@ -3,7 +3,7 @@
 
 <head>
     <meta charset='utf-8' />
-    <title>fishing</title>
+    <title>Haos Fishing Map</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css' rel='stylesheet' />
@@ -148,11 +148,12 @@
         document.getElementById('listing-group').addEventListener('change', function (e) {
             var handler = e.target.id;
             if (e.target.checked) {
-                map.setLayoutProperty('ca-mpas-0xxb9s', 'visibility', 'visible');
-                //  this.className = 'active';
+                map.setLayoutProperty('ca-mpas', 'visibility', 'visible');
+                map.setLayoutProperty('ca-mpas-names', 'visibility', 'visible');
+
             } else {
-                map.setLayoutProperty('ca-mpas-0xxb9s', 'visibility', 'none');
-                //  this.className = '';
+                map.setLayoutProperty('ca-mpas', 'visibility', 'none');
+                map.setLayoutProperty('ca-mpas-names', 'visibility', 'none');
             }
         });
 

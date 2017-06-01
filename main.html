@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>fishing</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <style>
+        .listing-group {
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            font-weight: 600;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+            border-radius: 3px;
+            max-width: 20%;
+            color: #fff;
+        }
+
+        .listing-group input[type=checkbox]:first-child+label {
+            border-radius: 3px 3px 0 0;
+        }
+
+        .listing-group label:last-child {
+            border-radius: 0 0 3px 3px;
+            border: none;
+        }
+
+        .listing-group input[type=checkbox] {
+            display: none;
+        }
+
+        .listing-group input[type=checkbox]+label {
+            background-color: #3386c0;
+            display: block;
+            cursor: pointer;
+            padding: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+        }
+
+        .listing-group input[type=checkbox]+label {
+            background-color: #3386c0;
+            text-transform: capitalize;
+        }
+
+        .listing-group input[type=checkbox]+label:hover,
+        .listing-group input[type=checkbox]:checked+label {
+            background-color: #4ea0da;
+        }
+
+        .listing-group input[type=checkbox]:checked+label:before {
+            content: '✔';
+            margin-right: 5px;
+        }
+    </style>
+
+    <style>
+        .marker {
+            display: block;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+        }
+    </style>
+
+    <div id='map'></div>
+
+    <nav id='listing-group' class='listing-group'>
+        <input type='checkbox' id='mpa' checked='checked'>
+        <label for='mpa'>MPA</label>
+    </nav>
+
+    <script>
+        var watchID;
+        var geoLoc;
+
+        function showLocation(position) {
+
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+
+            var popup = new mapboxgl.Popup({ closeOnClick: false })
+                .setLngLat([longitude, latitude])
+                .setHTML('<h1>me</h1>')
+                .addTo(map);
+            /*
+                        var el = document.createElement('div');
+                        el.className = 'marker';
+                        el.style.backgroundImage = 'url(marker-editor.svg)';
+                        el.style.width = '50 px';
+                        el.style.height = '50 px';
+                        
+                        new mapboxgl.Marker(el)
+                            .setLngLat([longitude, latitude])
+                            .addTo(map);
+                            */
+
+        }
+
+        function errorHandler(err) {
+            if (err.code == 1) {
+                alert("Error: Access is denied!");
+            }
+
+            else if (err.code == 2) {
+                alert("Error: Position is unavailable!");
+            }
+        }
+
+        function getLocationUpdate() {
+            if (navigator.geolocation) {
+                // timeout at 60000 milliseconds (60 seconds)
+                var options = { timeout: 60000 };
+                geoLoc = navigator.geolocation;
+                watchID = geoLoc.watchPosition(showLocation, errorHandler, options);
+            }
+
+            else {
+                alert("Sorry, browser does not support geolocation!");
+            }
+        }
+    </script>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiaGFvZ29kZW50MiIsImEiOiJjajIyMm10eXYwMDJzMzNrMWI2dnF0N2k3In0.bmJBjn8ZnFt7kcuV2zDbxA';
+        var map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/haogodent2/cj26mi2jo004k2rpe3dllrhm4',
+            center: [-122.410, 37.782], // starting position
+            zoom: 12 // starting zoom
+        });
+
+        // disable map rotation
+        map.dragRotate.disable();
+        map.touchZoomRotate.disableRotation();
+
+        //enable user location tracking
+        map.addControl(new mapboxgl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            }
+        }));
+
+        /*     var marker = new mapboxgl.Marker()
+                 .setLngLat([position.coords.latitude,
+                 position.coords.longitude])
+                 .addTo(map);
+         })
+     }*/
+
+        document.getElementById('listing-group').addEventListener('change', function (e) {
+            var handler = e.target.id;
+            if (e.target.checked) {
+                map.setLayoutProperty('ca-mpas-0xxb9s', 'visibility', 'visible');
+                //  this.className = 'active';
+            } else {
+                map.setLayoutProperty('ca-mpas-0xxb9s', 'visibility', 'none');
+                //  this.className = '';
+            }
+        });
+
+        getLocationUpdate();
+    </script>
+
+</body>
+
+</html>

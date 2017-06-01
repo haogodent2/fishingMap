@@ -92,30 +92,27 @@
     </nav>
 
     <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiaGFvZ29kZW50MiIsImEiOiJjajIyMm10eXYwMDJzMzNrMWI2dnF0N2k3In0.bmJBjn8ZnFt7kcuV2zDbxA';
+        var map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/haogodent2/cj26mi2jo004k2rpe3dllrhm4',
+            center: [-122.410, 37.782], // starting position
+            zoom: 12 // starting zoom
+        });
+
+        // disable map rotation
+        map.dragRotate.disable();
+        map.touchZoomRotate.disableRotation();
+
         var watchID;
         var geoLoc;
+        var popup = new mapboxgl.Popup({ closeOnClick: false})
+            .setHTML('<h1>me</h1>')
+            .addTo(map);
 
         function showLocation(position) {
-
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-
-            var popup = new mapboxgl.Popup({ closeOnClick: false })
-                .setLngLat([longitude, latitude])
-                .setHTML('<h1>me</h1>')
-                .addTo(map);
-            /*
-                        var el = document.createElement('div');
-                        el.className = 'marker';
-                        el.style.backgroundImage = 'url(marker-editor.svg)';
-                        el.style.width = '50 px';
-                        el.style.height = '50 px';
-                        
-                        new mapboxgl.Marker(el)
-                            .setLngLat([longitude, latitude])
-                            .addTo(map);
-                            */
-
+            popup.setLngLat([position.coords.longitude,
+             position.coords.latitude])
         }
 
         function errorHandler(err) {
@@ -140,20 +137,6 @@
                 alert("Sorry, browser does not support geolocation!");
             }
         }
-    </script>
-
-    <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoiaGFvZ29kZW50MiIsImEiOiJjajIyMm10eXYwMDJzMzNrMWI2dnF0N2k3In0.bmJBjn8ZnFt7kcuV2zDbxA';
-        var map = new mapboxgl.Map({
-            container: 'map', // container id
-            style: 'mapbox://styles/haogodent2/cj26mi2jo004k2rpe3dllrhm4',
-            center: [-122.410, 37.782], // starting position
-            zoom: 12 // starting zoom
-        });
-
-        // disable map rotation
-        map.dragRotate.disable();
-        map.touchZoomRotate.disableRotation();
 
         //enable user location tracking
         map.addControl(new mapboxgl.GeolocateControl({
@@ -161,13 +144,6 @@
                 enableHighAccuracy: true
             }
         }));
-
-        /*     var marker = new mapboxgl.Marker()
-                 .setLngLat([position.coords.latitude,
-                 position.coords.longitude])
-                 .addTo(map);
-         })
-     }*/
 
         document.getElementById('listing-group').addEventListener('change', function (e) {
             var handler = e.target.id;
